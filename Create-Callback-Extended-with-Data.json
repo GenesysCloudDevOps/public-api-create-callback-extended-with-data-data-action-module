@@ -1,0 +1,87 @@
+{
+  "name": "Create Callback Extended with Data",
+  "integrationType": "purecloud-data-actions",
+  "actionType": "custom",
+  "config": {
+    "request": {
+      "requestUrlTemplate": "/api/v2/conversations/callbacks",
+      "requestType": "POST",
+      "headers": {},
+      "requestTemplate": "{\n  \"callbackNumbers\": [ \"${input.callbackNumber}\" ],\n#if(\"$!{input.scriptId}\" != \"\")\n  \"scriptId\": \"$!{input.scriptId}\",\n#end\n#if(\"$!{input.callbackUserName}\" != \"\")\n  \"callbackUserName\": \"$!{input.callbackUserName}\",\n#end\n#if(\"$!{input.callbackScheduledTime}\" != \"\")\n  \"callbackScheduledTime\": \"$!{input.callbackScheduledTime}\",\n#end\n  \"routingData\": {\n    \"queueId\": \"${input.queueId}\"\n#if(\"$!{input.languageId}\" != \"\")\n    ,\"languageId\": \"$!{input.languageId}\"\n#end\n#if(\"$!{input.priority}\" != \"\")\n    ,\"priority\": $!{input.priority}\n#end\n#if(\"$!{input.preferredAgentId}\" != \"\")\n    ,\"scoredAgents\": [ { \"agent\": { \"id\": \"$!{input.preferredAgentId}\" }, \"score\": 100 } ]\n#end\n#if(\"$!{input.skillId}\" != \"\")\n    ,\"skillIds\": [ \"$!{input.skillId}\" ]\n#end\n  },\n\"data\": {\n  \"Phone Number\": \"${input.participantdataphonenumber}\",\n  \"Name\": \"${input.participantdataname}\",\n  \"Area Of Interest\": \"${input.participantdataareaofinterest}\",\n  \"CS Agent Name\": \"${input.participantdatacsagentname}\",\n  \"Date/Time\": \"${input.participantdatacallbacktime}\"\n}\n}"
+    },
+    "response": {
+      "translationMap": {
+        "id": "$.conversation.id"
+      },
+      "translationMapDefaults": {
+        "id": "\"\""
+      },
+      "successTemplate": "{ \"conversationId\": ${id} }"
+    }
+  },
+  "contract": {
+    "input": {
+      "inputSchema": {
+        "type": "object",
+        "required": ["callbackNumber", "queueId"],
+        "properties": {
+          "callbackNumber": {
+            "type": "string"
+          },
+          "callbackUserName": {
+            "type": "string"
+          },
+          "callbackScheduledTime": {
+            "type": "string"
+          },
+          "queueId": {
+            "type": "string"
+          },
+          "scriptId": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "preferredAgentId": {
+            "type": "string"
+          },
+          "languageId": {
+            "type": "string"
+          },
+          "skillId": {
+            "type": "string"
+          },
+          "participantdataname": {
+            "type": "string"
+          },
+          "participantdataareaofinterest": {
+            "type": "string"
+          },
+          "participantdatacallbacktime": {
+            "type": "string"
+          },
+          "participantdatacsagentname": {
+            "type": "string"
+          },
+          "participantdataphonenumber": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "output": {
+      "successSchema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "secure": false
+}
